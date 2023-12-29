@@ -314,8 +314,8 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
     customElements.define("game-row", x);
     var z = document.createElement("template");
     z.innerHTML = "\n  <slot></slot>\n";
-    var j = "hinglish-wordle-darkmode",
-        S = "hinglish-wordle-cbmode",
+    var j = "hinglish-wordle-ns-darkmode",
+        S = "hinglish-wordle-ns-cbmode",
         C = function(e) {
             r(t, e);
             var a = h(t);
@@ -844,7 +844,7 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
             }
             return e
         }))),
-        wa = "hinglish-wordle-state",
+        wa = "hinglish-wordle-ns-state",
         xa = {
             boardState: null,
             evaluations: null,
@@ -7177,7 +7177,7 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
                 window.localStorage.setItem(Ya, JSON.stringify(e))
             }(n)
     }
-    var Ka, Qa = "hinglish-wordle-refresh",
+    var Ka, Qa = "hinglish-wordle-ns-refresh",
         es = window.localStorage;
 
     function as() {
@@ -7185,7 +7185,7 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
             es.getItem(Qa) && (es.removeItem(Qa), window.location.href.match(/.*\.nytimes\.com/g) ? window.location.reload(!0) : window.location.replace("https://www.nytimes.com/games/wordle"))
         }), 432e5))
     }
-    var ss = "hinglish-wordle-statistics",
+    var ss = "hinglish-wordle-ns-statistics",
         ts = window.localStorage;
 
     function ns(e, a) {
@@ -8032,7 +8032,7 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
     }(u(HTMLElement));
     customElements.define("game-switch", Ks);
     var Qs = document.createElement("template");
-    Qs.innerHTML = '\n  <style>\n  .instructions {\n    font-size: 14px;\n    color: var(--color-tone-1)\n  }\n\n  .examples {\n    border-bottom: 1px solid var(--color-tone-4);\n    border-top: 1px solid var(--color-tone-4);\n  }\n\n  .example {\n    margin-top: 24px;\n    margin-bottom: 24px;\n  }\n\n  game-tile {\n    width: 40px;\n    height: 40px;\n  }\n\n  :host([page]) section {\n    padding: 16px;\n    padding-top: 0px;\n  }\n\n  </style>\n  <section>\n    <div class="instructions">\n      <p>Guess the <strong>WORDLE</strong> in six tries. पता करें <strong>आज का शब्द</strong> - छ: प्रयासों में </p>\n      <p>Each guess must be a valid five-letter Hinglish (Hindi, plus common English words such as PHOTO, PHONE etc.) word written using alphabets A - Z. Hit the enter button to submit.</p>\n  <p> हर अनुमानित शब्द पाँच अक्षर का होना चाहिए। कीबोर्ड द्वारा पाँच अक्षर टाइप करें, फिर ENTER बटन दबाए।   </p>\n    <p>After each guess, the color of the tiles will change to show how close your guess was to the word.</p>\n  <p> हर प्रयास के बाद डब्बों के रंग बदल जाएंगे ताकि आपको मदद मिल सकें कि आप आज के शब्द के कितने करीब हैं। </p>\n    <div class="examples">\n        <p><strong>Examples उदाहरण </strong></p>\n        <div class="example">\n          <div class="row">\n            <game-tile letter="b" evaluation="correct" reveal></game-tile>\n            <game-tile letter="a"></game-tile>\n            <game-tile letter="h"></game-tile>\n            <game-tile letter="a"></game-tile>\n            <game-tile letter="n"></game-tile>\n          </div>\n          <p>The letter <strong>B</strong> is in the word and in the correct spot.</p>\n  <p> <strong>B</strong> अक्षर आज के शब्द में है और सही जगह पर है। </p>\n      </div>\n        <div class="example">\n          <div class="row">\n            <game-tile letter="v"></game-tile>\n            <game-tile letter="i" evaluation="present" reveal></game-tile>\n            <game-tile letter="n"></game-tile>\n            <game-tile letter="a"></game-tile>\n            <game-tile letter="y"></game-tile>\n          </div>\n          <p>The letter <strong>I</strong> is in the word but in the wrong spot.</p>\n  <p> <strong>I</strong> अक्षर आज के शब्द में है और सही जगह पर नहीं है। </p>\n      </div>\n        <div class="example">\n          <div class="row">\n            <game-tile letter="d"></game-tile>\n            <game-tile letter="h"></game-tile>\n            <game-tile letter="a"></game-tile>\n            <game-tile letter="n" evaluation="absent" reveal></game-tile>\n            <game-tile letter="g"></game-tile>\n          </div>\n          <p>The letter <strong>N</strong> is not in the word in any spot.</p>\n  <p> <strong>N</strong> अक्षर आज के शब्द में नहीं है। </p>\n      </div>\n      </div>\n      <p><strong>A new WORDLE will be available each day!<strong></p>\n <p> हर रोज एक नया शब्द खोजना होगा </p>\n   </div>\n  </section>\n';
+    Qs.innerHTML = '\n  <style>\n  .instructions {\n    font-size: 14px;\n    color: var(--color-tone-1)\n  }\n\n  .examples {\n    border-bottom: 1px solid var(--color-tone-4);\n    border-top: 1px solid var(--color-tone-4);\n  }\n\n  .example {\n    margin-top: 24px;\n    margin-bottom: 24px;\n  }\n\n  game-tile {\n    width: 40px;\n    height: 40px;\n  }\n\n  :host([page]) section {\n    padding: 16px;\n    padding-top: 0px;\n  }\n\n  </style>\n  <section>\n    <div class="instructions">\n      <p>Guess the <strong>WORDLE</strong> in six tries. पता करें <strong>आज का शब्द</strong> - छ: प्रयासों में </p>\n      <p>Each guess must be a valid five-letter Hinglish (Hindi, plus common English words such as PHOTO, PHONE etc.) word written using alphabets A - Z. Hit the enter button to submit.</p>\n  <p> हर अनुमानित शब्द पाँच अक्षर का होना चाहिए। कीबोर्ड द्वारा पाँच अक्षर टाइप करें, फिर ENTER बटन दबाए।   </p>\n    <p>After each guess, the color of the tiles will change to show how close your guess was to the word.</p>\n  <p> हर प्रयास के बाद डब्बों के रंग बदल जाएंगे ताकि आपको मदद मिल सकें कि आप आज के शब्द के कितने करीब हैं। </p>\n    <div class="examples">\n        <p><strong>Examples उदाहरण </strong></p>\n        <div class="example">\n          <div class="row">\n            <game-tile letter="b" evaluation="correct" reveal></game-tile>\n            <game-tile letter="a"></game-tile>\n            <game-tile letter="h"></game-tile>\n            <game-tile letter="a"></game-tile>\n            <game-tile letter="n"></game-tile>\n          </div>\n          <p>The letter <strong>B</strong> is in the word and in the correct spot.</p>\n  <p> <strong>B</strong> अक्षर शब्द में है और सही जगह पर है। </p>\n      </div>\n        <div class="example">\n          <div class="row">\n            <game-tile letter="v"></game-tile>\n            <game-tile letter="i" evaluation="present" reveal></game-tile>\n            <game-tile letter="n"></game-tile>\n            <game-tile letter="a"></game-tile>\n            <game-tile letter="y"></game-tile>\n          </div>\n          <p>The letter <strong>I</strong> is in the word but in the wrong spot.</p>\n  <p> <strong>I</strong> अक्षर शब्द में है और सही जगह पर नहीं है। </p>\n      </div>\n        <div class="example">\n          <div class="row">\n            <game-tile letter="d"></game-tile>\n            <game-tile letter="h"></game-tile>\n            <game-tile letter="a"></game-tile>\n            <game-tile letter="n" evaluation="absent" reveal></game-tile>\n            <game-tile letter="g"></game-tile>\n          </div>\n          <p>The letter <strong>N</strong> is not in the word in any spot.</p>\n  <p> <strong>N</strong> अक्षर शब्द में नहीं है। </p>\n      </div>\n      </div>\n      <p><strong>A new WORDLE will be available on each refresh!<strong></p>\n <p> रिलोड करने पर एक नया शब्द खोजना होगा </p>\n   </div>\n  </section>\n';
     var et = function(e) {
         r(t, e);
         var a = h(t);
