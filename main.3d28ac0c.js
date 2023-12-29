@@ -7138,7 +7138,7 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
         //return Ba(Ga, e)
     }
     var Wa = "abcdefghijklmnopqrstuvwxyz";
-    var Ya = "nyt-wordle-statistics",
+    var Ya = "hinglish-wordle-ns-statistics",
         Ua = "fail",
         Ja = {
             currentStreak: 0,
