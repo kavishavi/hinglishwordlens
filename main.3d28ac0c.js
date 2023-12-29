@@ -314,8 +314,8 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
     customElements.define("game-row", x);
     var z = document.createElement("template");
     z.innerHTML = "\n  <slot></slot>\n";
-    var j = "nyt-wordle-darkmode",
-        S = "nyt-wordle-cbmode",
+    var j = "hinglish-wordle-darkmode",
+        S = "hinglish-wordle-cbmode",
         C = function(e) {
             r(t, e);
             var a = h(t);
@@ -844,7 +844,7 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
             }
             return e
         }))),
-        wa = "nyt-wordle-state",
+        wa = "hinglish-wordle-state",
         xa = {
             boardState: null,
             evaluations: null,
@@ -7177,7 +7177,7 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
                 window.localStorage.setItem(Ya, JSON.stringify(e))
             }(n)
     }
-    var Ka, Qa = "nyt-wordle-refresh",
+    var Ka, Qa = "hinglish-wordle-refresh",
         es = window.localStorage;
 
     function as() {
@@ -7185,7 +7185,7 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
             es.getItem(Qa) && (es.removeItem(Qa), window.location.href.match(/.*\.nytimes\.com/g) ? window.location.reload(!0) : window.location.replace("https://www.nytimes.com/games/wordle"))
         }), 432e5))
     }
-    var ss = "nyt-wordle-statistics",
+    var ss = "hinglish-wordle-statistics",
         ts = window.localStorage;
 
     function ns(e, a) {
