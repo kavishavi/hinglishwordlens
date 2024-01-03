@@ -7133,11 +7133,28 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
         return Ma[gIdx];
     }
 
+    function Rst(e) {
+        var n = za();
+
+        n.today = new Date;
+        n.refreshTimer = as();
+
+        n.boardState = new Array(6).fill("");
+        n.evaluations = new Array(6).fill(null);
+        n.solution = Va(n.today);
+        n.dayOffset = Fa(n.today);
+        n.gameStatus = "IN_PROGRESS"
+        n.lastCompletedTs = null;
+        //z.hardMode = n.hardMode;
+        n.restoringFromLocalStorage = false;
+        n.rowIndex = 0;
+    }
+
     function Fa(e) {
         return gIdx;
         //return Ba(Ga, e)
     }
-    var Wa = "abcdefghijklmnopqrstuvwxyz";
+    var Wa = "abcdefghijklmnopqrstuvwxyz@";
     var Ya = "hinglish-wordle-ns-statistics",
         Ua = "fail",
         Ja = {
@@ -7228,7 +7245,8 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
         }
     }
     var rs = document.createElement("template");
-    rs.innerHTML = "\n  <style>\n  .toaster {\n    position: absolute;\n    top: 10%;\n    left: 50%;\n    transform: translate(-50%, 0);\n    pointer-events: none;\n    width: fit-content;\n  }\n  #game-toaster {\n    z-index: ".concat(1e3, ";\n  }\n  #system-toaster {\n    z-index: ").concat(4e3, ';\n  }\n\n  #game {\n    width: 100%;\n    max-width: var(--game-max-width);\n    margin: 0 auto;\n    height: calc(100% - var(--header-height));\n    display: flex;\n    flex-direction: column;\n  }\n  header {\n    display: flex;\n    flex-direction: row;\n    align-items: center;\n    justify-content: space-between;\n    flex-wrap: nowrap;\n    padding: 0 16px;\n    height: var(--header-height);\n    color: var(--color-tone-1);\n    border-bottom: 1px solid var(--color-tone-4);\n  }\n  header .title {\n    font-family: \'nyt-karnakcondensed\';\n    font-weight: 700;\n    font-size: 37px;\n    line-height: 100%;\n    letter-spacing: 0.01em;\n    text-align: center;\n    left: 0;\n    right: 0;\n    pointer-events: none;\n  }\n  .menu-left {\n    display: flex;\n    margin: 0;\n    padding: 0;\n    align-items: center;\n    width: 70px;\n    justify-content: flex-start;\n  }\n  .menu-right {\n    display: flex;\n    width: 70px;\n    justify-content: flex-end;\n  }\n  #nav-button {\n    padding-top: 2px;\n  }\n\n  @media (min-width: 415px) {\n    header {\n      padding: 0px 16px;\n    }\n  }\n\n  @media (max-width: 360px) {\n    header .title {\n      font-size: 22px;\n      letter-spacing: 0.1rem;\n    }\n  }\n\n  #board-container {\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    flex-grow: 1;\n    overflow: hidden;\n  }\n  #board {\n    display: grid;\n    grid-template-rows: repeat(6, 1fr);\n    grid-gap: 5px;\n    padding:10px;\n    box-sizing: border-box;\n  }\n  button.icon {\n    background: none;\n    border: none;\n    cursor: pointer;\n    padding: 0 4px;\n  }\n\n  #debug-tools {\n    position: absolute;\n    bottom: 0;\n  }\n\n  </style>\n  <game-theme-manager>\n  <header>\n  <div class="menu-left">\n    <button id="nav-button" class="icon" aria-label="Navigation menu. Click for links to other NYT Games and our Privacy Policy." tabindex="-1">\n      <nav-icon></nav-icon>\n    </button>\n    <button id="help-button" class="icon" aria-label="Help" tabindex="-1">\n      <game-icon icon="help"></game-icon>\n    </button>\n  </div>\n  <div class="title">\n    Hinglish Wordle NonStop\n  </div>\n  <div class="menu-right">\n    <button id="statistics-button" class="icon" aria-label="Statistics" tabindex="-1">\n      <game-icon icon="statistics"></game-icon>\n    </button>\n    <button id="settings-button" class="icon" aria-label="Settings" tabindex="-1">\n      <game-icon icon="settings"></game-icon>\n    </button>\n  </div>\n</header>\n    <div id="game">\n        <div id="board-container">\n          <div id="board"></div>\n        </div>\n        <game-keyboard></game-keyboard>\n        <game-nav-modal></game-nav-modal>\n        <game-modal></game-modal>\n        <game-page></game-page>\n        <div class="toaster" id="game-toaster"></div>\n        <div class="toaster" id="system-toaster"></div>\n    </div>\n  </game-theme-manager>\n  <div id="debug-tools"></div>\n');
+    
+    rs.innerHTML = "\n  <style>\n  .toaster {\n    position: absolute;\n    top: 10%;\n    left: 50%;\n    transform: translate(-50%, 0);\n    pointer-events: none;\n    width: fit-content;\n  }\n  #game-toaster {\n    z-index: ".concat(1e3, ";\n  }\n  #system-toaster {\n    z-index: ").concat(4e3, ';\n  }\n\n  #game {\n    width: 100%;\n    max-width: var(--game-max-width);\n    margin: 0 auto;\n    height: calc(100% - var(--header-height));\n    display: flex;\n    flex-direction: column;\n  }\n  header {\n    display: flex;\n    flex-direction: row;\n    align-items: center;\n    justify-content: space-between;\n    flex-wrap: nowrap;\n    padding: 0 16px;\n    height: var(--header-height);\n    color: var(--color-tone-1);\n    border-bottom: 1px solid var(--color-tone-4);\n  }\n  header .title {\n    font-family: \'nyt-karnakcondensed\';\n    font-weight: 700;\n    font-size: 25px;\n    line-height: 100%;\n    letter-spacing: 0.01em;\n    text-align: center;\n    left: 0;\n    right: 0;\n    pointer-events: none;\n  }\n  .menu-left {\n    display: flex;\n    margin: 0;\n    padding: 0;\n    align-items: center;\n    width: 24px;\n    justify-content: flex-start;\n  }\n  .menu-right {\n    display: flex;\n    width: 70px;\n    justify-content: flex-end;\n  }\n  #nav-button {\n    padding-top: 2px;\n  }\n\n  @media (min-width: 415px) {\n    header {\n      padding: 0px 16px;\n    }\n  }\n\n  @media (max-width: 360px) {\n    header .title {\n      font-size: 22px;\n      letter-spacing: 0.1rem;\n    }\n  }\n\n  #board-container {\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    flex-grow: 1;\n    overflow: hidden;\n  }\n  #board {\n    display: grid;\n    grid-template-rows: repeat(6, 1fr);\n    grid-gap: 5px;\n    padding:10px;\n    box-sizing: border-box;\n  }\n  button.icon {\n    background: none;\n    border: none;\n    cursor: pointer;\n    padding: 0 4px;\n  }\n\n  #debug-tools {\n    position: absolute;\n    bottom: 0;\n  }\n\n  </style>\n  <game-theme-manager>\n  <header>\n  <div class="menu-left">\n <button id="help-button" class="icon" aria-label="Help" tabindex="-1">\n      <game-icon icon="help"></game-icon>\n    </button>\n  </div>\n  <div class="title">\n    Hinglish Wordle NonStop\n  </div>\n  <div class="menu-right">\n    <button id="statistics-button" class="icon" aria-label="Statistics" tabindex="-1">\n      <game-icon icon="statistics"></game-icon>\n    </button>\n    <button id="settings-button" class="icon" aria-label="Settings" tabindex="-1">\n      <game-icon icon="settings"></game-icon>\n    </button>\n  </div>\n</header>\n    <div id="game">\n        <div id="board-container">\n          <div id="board"></div>\n        </div>\n        <game-keyboard></game-keyboard>\n        <game-nav-modal></game-nav-modal>\n        <game-modal></game-modal>\n        <game-page></game-page>\n        <div class="toaster" id="game-toaster"></div>\n        <div class="toaster" id="system-toaster"></div>\n    </div>\n  </game-theme-manager>\n  <div id="debug-tools"></div>\n');
     var is = document.createElement("template");
     is.innerHTML = '\n<button id="reveal">reveal</button>\n<button id="shake">shake</button>\n<button id="bounce">bounce</button>\n<button id="toast">toast</button>\n<button id="modal">modal</button>\n';
     var ls = "IN_PROGRESS",
@@ -7244,20 +7262,8 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
                 s(this, t), o(m(e = a.call(this)), "tileIndex", 0), o(m(e), "rowIndex", 0), o(m(e), "solution", void 0), o(m(e), "boardState", void 0), o(m(e), "evaluations", void 0), o(m(e), "canInput", !0), o(m(e), "gameStatus", ls), o(m(e), "letterEvaluations", {}), o(m(e), "$board", void 0), o(m(e), "$keyboard", void 0), o(m(e), "$game", void 0), o(m(e), "today", void 0), o(m(e), "lastPlayedTs", void 0), o(m(e), "lastCompletedTs", void 0), o(m(e), "hardMode", void 0), o(m(e), "dayOffset", void 0), e.attachShadow({
                     mode: "open"
                 }), e.today = new Date, e.refreshTimer = as();
-                var n = za();
-
-                n.today = new Date;
-                n.refreshTimer = as();
         
-                n.boardState = new Array(6).fill("");
-                n.evaluations = new Array(6).fill(null);
-                n.solution = Va(n.today);
-                n.dayOffset = Fa(n.today);
-                n.gameStatus = "IN_PROGRESS"
-                n.lastCompletedTs = null;
-                //z.hardMode = n.hardMode;
-                n.restoringFromLocalStorage = false;
-                n.rowIndex = 0;
+                Rst();
 
                 return e.lastPlayedTs = n.lastPlayedTs, e.lastCompletedTs = n.lastCompletedTs, !e.lastPlayedTs || Ba(new Date(e.lastPlayedTs), e.today) >= 1 ? (e.boardState = new Array(6).fill(""), e.evaluations = new Array(6).fill(null), e.solution = Va(e.today), e.dayOffset = Fa(e.today), e.lastCompletedTs = n.lastCompletedTs, e.hardMode = n.hardMode, e.restoringFromLocalStorage = !1, ja({
                     rowIndex: e.rowIndex,
@@ -7361,6 +7367,40 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
                     }
                 }
             }, {
+                key: "resetGame",
+                value: function() {
+                    // var n = za();
+
+                    this.today = new Date;
+                    this.refreshTimer = as();
+
+                    this.boardState = new Array(6).fill("");
+                    this.evaluations = new Array(6).fill(null);
+                    this.solution = Va(n.today);
+                    this.dayOffset = Fa(n.today);
+                    this.gameStatus = "IN_PROGRESS"
+                    //this.lastCompletedTs = null;
+                    //z.hardMode = n.hardMode;
+                    this.restoringFromLocalStorage = false;
+                    this.rowIndex = 0;
+
+                    for (var idx = 0; idx < 6; idx++) {
+                        var d = this.$board.querySelectorAll("game-row")[idx];
+                        d.removeAttribute("letters");
+                        d.removeAttribute("invalid");
+
+                    }
+
+                    var wL = "a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z".split(',');
+
+                    for ( var idx = 0; idx < 26; idx++) {
+                        var a = this.$keyboard.shadowRoot.querySelector('[data-key="'.concat(wL[idx], '"]'));
+                        
+                        a.dataset.state = "", a.classList.remove("fade")
+                    }
+
+                }
+            }, {
                 key: "addToast",
                 value: function(e, a) {
                     var s = arguments.length > 2 && void 0 !== arguments[2] && arguments[2],
@@ -7408,7 +7448,7 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
                     }
                     this.$game.addEventListener("game-key-press", (function(e) {
                             var a = e.detail.key;
-                            "←" === a || "Backspace" === a ? d.removeLetter() : "↵" === a || "Enter" === a ? d.submitGuess() : Wa.includes(a.toLowerCase()) && d.addLetter(a.toLowerCase())
+                            "←" === a || "Backspace" === a ? d.removeLetter() : "↵" === a || "Enter" === a ? d.submitGuess() : "@" === a || "Reset" === a ? d.resetGame() : Wa.includes(a.toLowerCase()) && d.addLetter(a.toLowerCase())
                         })), this.$game.addEventListener("game-last-tile-revealed-in-row", (function(e) {
                             d.$keyboard.letterEvaluations = d.letterEvaluations, d.rowIndex < 6 && (d.canInput = !0);
                             var a = d.$board.querySelectorAll("game-row")[d.rowIndex - 1];
@@ -7532,7 +7572,8 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
     var fs = [
             ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
             ["-", "a", "s", "d", "f", "g", "h", "j", "k", "l", "-"],
-            ["↵", "z", "x", "c", "v", "b", "n", "m", "←"]
+            ["↵", "z", "x", "c", "v", "b", "n", "m", "←"],
+            ["@"]
         ],
         ks = function(e) {
             r(t, e);
@@ -7572,7 +7613,7 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
                             var s = a.key,
                                 t = a.metaKey,
                                 n = a.ctrlKey;
-                            t || n || (Wa.includes(s.toLowerCase()) || "Backspace" === s || "Enter" === s) && e.dispatchKeyPressEvent(s)
+                            t || n || (Wa.includes(s.toLowerCase()) || "Backspace" === s || "Enter" === s || "Reset" === s) && e.dispatchKeyPressEvent(s)
                         }
                     })), this.$keyboard.addEventListener("transitionend", (function(a) {
                         var s = a.target.closest("button");
@@ -7581,12 +7622,13 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
                         var s = document.createElement("div");
                         s.classList.add("row"), a.forEach((function(e) {
                             var a;
-                            if (e >= "a" && e <= "z" || "←" === e || "↵" === e) {
+                            if (e >= "a" && e <= "z" || "←" === e || "↵" === e || "@" === e) {
                                 if ((a = gs.content.cloneNode(!0).firstElementChild).dataset.key = e, a.textContent = e, "←" === e) {
                                     var t = document.createElement("game-icon");
                                     t.setAttribute("icon", "backspace"), a.textContent = "", a.appendChild(t), a.classList.add("one-and-a-half")
                                 }
                                 "↵" == e && (a.textContent = "enter", a.classList.add("one-and-a-half"))
+                                "@" == e && (a.textContent = "reset", a.classList.add("one-and-a-half"))
                             } else(a = bs.content.cloneNode(!0).firstElementChild).classList.add(1 === e.length ? "half" : "one");
                             s.appendChild(a)
                         })), e.$keyboard.appendChild(s)
@@ -7832,6 +7874,8 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
     
     //Gs.innerHTML = '\n  <div class="countdown">\n    <h1>Next WORDLE</h1>\n    <div id="timer">\n      <div class="statistic-container">\n        <div class="statistic timer">\n          <countdown-timer></countdown-timer>\n        </div>\n      </div>\n    </div>\n  </div>\n  <div class="share">\n    <button id="share-button">\n      Share <game-icon icon="share"></game-icon>\n    </button>\n  </div>\n';
 
+    Gs.innerHTML = '\n  <div class="countdown">\n    <button data-key="@" class="one-and-a-half" onClick="this.dispatchEvent(new KeyboardEvent( \'keydown\' , {\'key\':\'@\'} ));" >NEXT WORDLE</button>\n     </div>\n  <div class="share">\n    <button id="share-button">\n      Share <game-icon icon="share"></game-icon>\n    </button>\n  </div>\n';
+
     var Bs = {
             currentStreak: "Current Streak",
             maxStreak: "Max Streak",
@@ -7923,7 +7967,7 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
                                         }
                                     })), d += "\n")
                                 })), {
-                                    text: "".concat(l, "\n \n").concat(d.trimEnd()).concat("\n\n bit.ly/HinglishWordle \n")
+                                    text: "".concat(l, "\n \n").concat(d.trimEnd()).concat("\n\n bit.ly/HinglishWordlens \n")
                                 }
                             }({
                                 evaluations: e.gameApp.evaluations,
@@ -7951,7 +7995,7 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
         ].map((function(e) {
             return "\n    <a href=".concat(e.url, " id=").concat(e.id, '>\n      <div class="nav-item" style="--hover-color: var(--color-nav-hover)">\n        <span style="background-image: ').concat(e.backgroundImage, '; background-size: 20px;"class="nav-icon"></span>\n          ').concat(e.name, " \n      </div>\n    </a>\n    ")
         })).join("");
-    Fs.innerHTML = "\n  <style>\n    .container {\n      display: flex;\n      flex-direction: column;\n      align-items: left;\n      justify-content: center;\n    }\n    h1 {\n      font-weight: 700;\n      font-size: 16px;\n      letter-spacing: 0.5px;\n      text-transform: uppercase;\n      text-align: center;\n      margin-bottom: 10px;\n    }\n\n    .nav-container {\n      flex: 1;\n    }\n\n    .nav-container .nav {\n      font-size: 36px;\n      font-weight: 400;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      text-align: center;\n      letter-spacing: 0.05em;\n      font-variant-numeric: proportional-nums;\n    }\n\n    .nav-container .label {\n      font-size: 12px;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      text-align: center;\n    }\n\n    .game-list, .nyt-list {\n        list-style: none;\n        color: var(--color-tone-1);\n        padding: unset;\n        margin: unset;\n    }\n\n    .nyt-list {\n      margin-top: 5px;\n      padding: 12px 0px;\n      border-top: 1px solid #DCDCDC;\n    }\n\n    .nav-item {\n        display: flex;\n        justify-content: left;\n        align-items: center;\n        height: 40px;\n        font-weight: 500;\n        font-family: 'nyt-franklin';\n        font-size: 16px;\n        line-height: 16px;\n        padding-left: 18px;\n    }\n\n    .nav-item:hover {\n        background-color: var(--hover-color);\n    }\n\n    .nav-icon {\n        padding-bottom: 2px;\n        content: '';\n        height: 20px;\n        width: 28px;\n        padding-right: 8px;\n        display: inline-block;\n        vertical-align: middle;\n        background-repeat: no-repeat;\n    }\n\n    #nav {\n      padding-bottom: 10px;\n    }\n\n    a {\n        text-decoration: none;\n        color: inherit;\n    }\n\n    .more-text {\n        font-family: 'nyt-franklin-700';\n        font-weight: 700;\n        text-transform: uppercase;\n        font-size: 12px;\n        line-height: 12px;\n        margin: 32px 0px 24px 0px;\n        padding-left: 18px;\n    }\n\n    .nav-header {\n        padding-top: 18px;\n        padding-left: 18px;\n    }\n\n    .privacy {\n      letter-spacing: .5px;\n      font-family: 'nyt-franklin';\n      position: absolute;\n      bottom: 0;\n      left: 0;\n      right: 0;\n      margin: 0px 25px 0px 17px;\n      padding: 12px 0px;\n      border-top: 1px solid #DCDCDC;\n      color: var(--color-tone-1);\n      font-size: 15px;\n      text-align: right;\n      display: flex;\n      justify-content: space-between;\n      align-items: flex-end;\n    }\n  </style>\n\n  <div class=\"container\">\n    <span class=\"nav-header\">\n        <nyt-icon></nyt-icon>\n    </span>\n    <span class=\"more-text\">Hinglish Wordle NonStop</span>\n    <div class=\"game-list\">".concat(Ws, '</div>\n    <div class="nyt-list">').concat(Ys, '</div>\n    <div class="privacy">\n      <a href="https://www.bbc.com" onmouseover="this.style.textDecoration=\'underline\';" \n      onmouseout="this.style.textDecoration=\'none\';">\n        \n      </a>\n    </div>\n  </div>\n');
+    Fs.innerHTML = "\n  <style>\n    .container {\n      display: flex;\n      flex-direction: column;\n      align-items: left;\n      justify-content: center;\n    }\n    h1 {\n      font-weight: 700;\n      font-size: 16px;\n      letter-spacing: 0.5px;\n      text-transform: uppercase;\n      text-align: center;\n      margin-bottom: 10px;\n    }\n\n    .nav-container {\n      flex: 1;\n    }\n\n    .nav-container .nav {\n      font-size: 36px;\n      font-weight: 400;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      text-align: center;\n      letter-spacing: 0.05em;\n      font-variant-numeric: proportional-nums;\n    }\n\n    .nav-container .label {\n      font-size: 12px;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      text-align: center;\n    }\n\n    .game-list, .nyt-list {\n        list-style: none;\n        color: var(--color-tone-1);\n        padding: unset;\n        margin: unset;\n    }\n\n    .nyt-list {\n      margin-top: 5px;\n      padding: 12px 0px;\n      border-top: 1px solid #DCDCDC;\n    }\n\n    .nav-item {\n        display: flex;\n        justify-content: left;\n        align-items: center;\n        height: 40px;\n        font-weight: 500;\n        font-family: 'nyt-franklin';\n        font-size: 16px;\n        line-height: 16px;\n        padding-left: 18px;\n    }\n\n    .nav-item:hover {\n        background-color: var(--hover-color);\n    }\n\n    .nav-icon {\n        padding-bottom: 2px;\n        content: '';\n        height: 20px;\n        width: 28px;\n        padding-right: 8px;\n        display: inline-block;\n        vertical-align: middle;\n        background-repeat: no-repeat;\n    }\n\n    #nav {\n      padding-bottom: 10px;\n    }\n\n    a {\n        text-decoration: none;\n        color: inherit;\n    }\n\n    .more-text {\n        font-family: 'nyt-franklin-700';\n        font-weight: 700;\n        text-transform: uppercase;\n        font-size: 12px;\n        line-height: 12px;\n        margin: 32px 0px 24px 0px;\n        padding-left: 18px;\n    }\n\n    .nav-header {\n        padding-top: 18px;\n        padding-left: 18px;\n    }\n\n    .privacy {\n      letter-spacing: .5px;\n      font-family: 'nyt-franklin';\n      position: absolute;\n      bottom: 0;\n      left: 0;\n      right: 0;\n      margin: 0px 25px 0px 17px;\n      padding: 12px 0px;\n      border-top: 1px solid #DCDCDC;\n      color: var(--color-tone-1);\n      font-size: 15px;\n      text-align: right;\n      display: flex;\n      justify-content: space-between;\n      align-items: flex-end;\n    }\n  </style>\n\n  <div class=\"container\">\n    <span class=\"nav-header\">\n        <nyt-icon></nyt-icon>\n    </span>\n    <span class=\"more-text\">Hinglish Wordle NonStop</span>\n   ";
     var Us = function(e) {
         r(t, e);
         var a = h(t);
@@ -8032,7 +8076,7 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
     }(u(HTMLElement));
     customElements.define("game-switch", Ks);
     var Qs = document.createElement("template");
-    Qs.innerHTML = '\n  <style>\n  .instructions {\n    font-size: 14px;\n    color: var(--color-tone-1)\n  }\n\n  .examples {\n    border-bottom: 1px solid var(--color-tone-4);\n    border-top: 1px solid var(--color-tone-4);\n  }\n\n  .example {\n    margin-top: 24px;\n    margin-bottom: 24px;\n  }\n\n  game-tile {\n    width: 40px;\n    height: 40px;\n  }\n\n  :host([page]) section {\n    padding: 16px;\n    padding-top: 0px;\n  }\n\n  </style>\n  <section>\n    <div class="instructions">\n      <p>Guess the <strong>WORDLE</strong> in six tries. पता करें <strong>आज का शब्द</strong> - छ: प्रयासों में </p>\n      <p>Each guess must be a valid five-letter Hinglish (Hindi, plus common English words such as PHOTO, PHONE etc.) word written using alphabets A - Z. Hit the enter button to submit.</p>\n  <p> हर अनुमानित शब्द पाँच अक्षर का होना चाहिए। कीबोर्ड द्वारा पाँच अक्षर टाइप करें, फिर ENTER बटन दबाए।   </p>\n    <p>After each guess, the color of the tiles will change to show how close your guess was to the word.</p>\n  <p> हर प्रयास के बाद डब्बों के रंग बदल जाएंगे ताकि आपको मदद मिल सकें कि आप आज के शब्द के कितने करीब हैं। </p>\n    <div class="examples">\n        <p><strong>Examples उदाहरण </strong></p>\n        <div class="example">\n          <div class="row">\n            <game-tile letter="b" evaluation="correct" reveal></game-tile>\n            <game-tile letter="a"></game-tile>\n            <game-tile letter="h"></game-tile>\n            <game-tile letter="a"></game-tile>\n            <game-tile letter="n"></game-tile>\n          </div>\n          <p>The letter <strong>B</strong> is in the word and in the correct spot.</p>\n  <p> <strong>B</strong> अक्षर शब्द में है और सही जगह पर है। </p>\n      </div>\n        <div class="example">\n          <div class="row">\n            <game-tile letter="v"></game-tile>\n            <game-tile letter="i" evaluation="present" reveal></game-tile>\n            <game-tile letter="n"></game-tile>\n            <game-tile letter="a"></game-tile>\n            <game-tile letter="y"></game-tile>\n          </div>\n          <p>The letter <strong>I</strong> is in the word but in the wrong spot.</p>\n  <p> <strong>I</strong> अक्षर शब्द में है और सही जगह पर नहीं है। </p>\n      </div>\n        <div class="example">\n          <div class="row">\n            <game-tile letter="d"></game-tile>\n            <game-tile letter="h"></game-tile>\n            <game-tile letter="a"></game-tile>\n            <game-tile letter="n" evaluation="absent" reveal></game-tile>\n            <game-tile letter="g"></game-tile>\n          </div>\n          <p>The letter <strong>N</strong> is not in the word in any spot.</p>\n  <p> <strong>N</strong> अक्षर शब्द में नहीं है। </p>\n      </div>\n      </div>\n      <p><strong>A new WORDLE will be available on each refresh!<strong></p>\n <p> रिलोड करने पर एक नया शब्द खोजना होगा </p>\n   </div>\n  </section>\n';
+    Qs.innerHTML = '\n  <style>\n  .instructions {\n    font-size: 14px;\n    color: var(--color-tone-1)\n  }\n\n  .examples {\n    border-bottom: 1px solid var(--color-tone-4);\n    border-top: 1px solid var(--color-tone-4);\n  }\n\n  .example {\n    margin-top: 24px;\n    margin-bottom: 24px;\n  }\n\n  game-tile {\n    width: 40px;\n    height: 40px;\n  }\n\n  :host([page]) section {\n    padding: 16px;\n    padding-top: 0px;\n  }\n\n  </style>\n  <section>\n    <div class="instructions">\n      <p>Guess the <strong>WORDLE</strong> in six tries. <strong>शब्द</strong> पता करें - छ: प्रयासों में </p>\n      <p>Each guess must be a valid five-letter Hinglish (Hindi, plus common English words such as PHOTO, PHONE etc.) word written using alphabets A - Z. Hit the enter button to submit.</p>\n  <p> हर अनुमानित शब्द पाँच अक्षर का होना चाहिए। कीबोर्ड द्वारा पाँच अक्षर टाइप करें, फिर ENTER बटन दबाए।   </p>\n    <p>After each guess, the color of the tiles will change to show how close your guess was to the word.</p>\n  <p> हर प्रयास के बाद डब्बों के रंग बदल जाएंगे ताकि आपको मदद मिल सकें कि आप आज के शब्द के कितने करीब हैं। </p>\n    <div class="examples">\n        <p><strong>Examples उदाहरण </strong></p>\n        <div class="example">\n          <div class="row">\n            <game-tile letter="b" evaluation="correct" reveal></game-tile>\n            <game-tile letter="a"></game-tile>\n            <game-tile letter="h"></game-tile>\n            <game-tile letter="a"></game-tile>\n            <game-tile letter="n"></game-tile>\n          </div>\n          <p>The letter <strong>B</strong> is in the word and in the correct spot.</p>\n  <p> <strong>B</strong> अक्षर शब्द में है और सही जगह पर है। </p>\n      </div>\n        <div class="example">\n          <div class="row">\n            <game-tile letter="v"></game-tile>\n            <game-tile letter="i" evaluation="present" reveal></game-tile>\n            <game-tile letter="n"></game-tile>\n            <game-tile letter="a"></game-tile>\n            <game-tile letter="y"></game-tile>\n          </div>\n          <p>The letter <strong>I</strong> is in the word but in the wrong spot.</p>\n  <p> <strong>I</strong> अक्षर शब्द में है और सही जगह पर नहीं है। </p>\n      </div>\n        <div class="example">\n          <div class="row">\n            <game-tile letter="d"></game-tile>\n            <game-tile letter="h"></game-tile>\n            <game-tile letter="a"></game-tile>\n            <game-tile letter="n" evaluation="absent" reveal></game-tile>\n            <game-tile letter="g"></game-tile>\n          </div>\n          <p>The letter <strong>N</strong> is not in the word in any spot.</p>\n  <p> <strong>N</strong> अक्षर शब्द में नहीं है। </p>\n      </div>\n      </div>\n      <p><strong>A new WORDLE will be available on each refresh!<strong></p>\n <p> रिलोड करने पर एक नया शब्द खोजना होगा </p>\n   </div>\n  </section>\n';
     var et = function(e) {
         r(t, e);
         var a = h(t);
@@ -8109,7 +8153,9 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
         }(u(HTMLElement));
     customElements.define("game-icon", ot);
     var rt = document.createElement("template");
-    rt.innerHTML = '\n  <a href="https://www.nytimes.com/crosswords">\n  <svg\n    className="pz-nav__logo"\n    width="95"\n    height="88"\n    viewBox="0 0 138 25"\n    fill="none"\n    xmlns="http://www.w3.org/2000/svg"\n    aria-label="New York Times Games Logo. Click for more puzzles"\n  >\n    <rect width="138" height="25" fill="none" />\n    <path\n      d="M42.4599 1.03519C44.219 1.00558 45.9577 1.41634 47.5176 2.23008V1.45245H53.4162V8.80515H47.5239C47.1067 7.03494 46.3607 6.2257 44.5904 6.2257C42.365 6.23834 41.0058 7.86947 41.0058 12.4151C41.0058 17.3148 42.2386 18.8827 45.0077 18.8827C45.7187 18.8975 46.4203 18.7183 47.0371 18.3643V16.2211H45.2037V11.9283H53.4225V24.0543H48.3648V22.9289C46.902 24.0012 45.1195 24.5471 43.307 24.4778C36.9216 24.4778 32.4392 20.2546 32.4392 12.4214C32.4708 5.2584 36.9849 1.03519 42.4599 1.03519Z"\n      fill=var(--color-tone-1)\n    />\n    <path\n      d="M59.8645 24.3471C56.3494 24.3471 54.2883 22.4505 54.2883 19.2198C54.2883 15.9892 56.7097 13.9345 60.541 13.9345C61.9923 13.9222 63.4232 14.2767 64.701 14.965C64.6377 13.2264 63.3164 12.0947 60.8634 12.0947C59.0925 12.1015 57.3477 12.5215 55.7677 13.3212V9.25608C58.149 8.58084 60.6136 8.24457 63.0888 8.25718C69.7966 8.25718 72.0853 11.1907 72.0853 13.7701V19.8647H73.4382V24.0563H64.7705V22.5074C63.544 23.8603 61.7359 24.3471 59.8645 24.3471ZM64.859 18.8658C64.888 18.6431 64.8655 18.4166 64.7931 18.204C64.7207 17.9914 64.6005 17.7982 64.4417 17.6394C64.2829 17.4805 64.0897 17.3603 63.877 17.288C63.6644 17.2156 63.438 17.193 63.2153 17.222C62.1215 17.222 61.3755 17.7721 61.3755 18.8974C61.3755 20.0228 62.0077 20.478 63.1836 20.478C64.3596 20.478 64.8653 19.9911 64.8653 18.8848L64.859 18.8658Z"\n      fill=var(--color-tone-1)\n    />\n    <path\n      d="M75.8371 19.8644V12.7709H74.5726V8.57927H83.1455V10.2546C85.1433 8.73732 86.2055 8.25684 87.786 8.25684C89.7206 8.25684 90.8839 8.80687 92.3949 10.3874C94.3611 8.83848 95.7456 8.25684 97.4526 8.25684C100.614 8.25684 102.801 10.419 102.801 13.2197V19.858H104.066V24.0496H95.5054V14.6739C95.5054 13.4473 95.0249 12.7772 94.1841 12.7772C93.3432 12.7772 92.9576 13.4094 92.9576 14.6739V19.8644H94.0513V24.056H85.6681V14.6106C85.6681 13.5169 85.1497 12.7709 84.4036 12.7709C83.6576 12.7709 83.1392 13.479 83.1392 14.6106V19.8644H84.2646V24.056H74.5474V19.8644H75.8371Z"\n      fill=var(--color-tone-1)\n    />\n    <path\n      d="M113.781 24.3784C111.46 24.3784 108.881 23.8979 107.073 22.2858C106.216 21.5344 105.534 20.6058 105.072 19.5643C104.61 18.5229 104.38 17.3935 104.398 16.2544C104.398 11.1967 108.432 8.25684 113.25 8.25684C118.453 8.25684 121.924 11.93 121.924 16.3555C121.924 16.874 121.892 17.3545 121.86 17.8729H111.745C111.941 19.681 112.908 20.4839 114.387 20.4839C114.871 20.4803 115.347 20.3544 115.769 20.1178C116.191 19.8813 116.547 19.5418 116.803 19.131H121.86C120.773 22.6777 117.498 24.3784 113.781 24.3784ZM111.688 15.5273H115.481V15.1417C115.481 13.8204 115.159 12.4674 113.585 12.4674C113.201 12.4558 112.824 12.5691 112.51 12.7903C112.197 13.0115 111.964 13.3286 111.846 13.6939C111.68 14.2856 111.624 14.9028 111.682 15.5147L111.688 15.5273Z"\n      fill=var(--color-tone-1)\n    />\n    <path\n      d="M126.195 24.059H122.712V18.8875H126.164C126.581 20.2404 127.131 20.9485 128.452 20.9485C129.451 20.9485 130.064 20.5313 130.064 19.7536C130.064 19.2036 129.71 18.7863 129.034 18.4892L125.683 17.073C124.909 16.7631 124.246 16.2281 123.779 15.5371C123.313 14.8462 123.064 14.0312 123.066 13.1975C123.066 10.5549 125.677 8.23462 128.964 8.23462C130.352 8.25084 131.718 8.58156 132.96 9.20191V8.5697H136.469V13.4062H133.244C132.954 11.9584 132.372 11.244 131.215 11.244C130.374 11.244 129.729 11.6612 129.729 12.3377C129.729 12.9194 130.115 13.3998 130.924 13.7223L134.212 14.9867C136.374 15.8276 137.373 17.2121 137.373 19.0835C137.373 22.0486 134.844 24.3372 131.215 24.3372C129.603 24.3372 128.477 24.078 126.157 23.2435L126.195 24.059Z"\n      fill=var(--color-tone-1)\n    />\n    <path\n      d="M25.9544 1.46704H25.3601V24.0372H25.9544V1.46704Z"\n      fill=var(--color-tone-1)\n    />\n    <path\n      d="M19.2574 15.4535C18.8889 16.497 18.3042 17.4509 17.5416 18.2527C16.7789 19.0546 15.8555 19.6863 14.8318 20.1066V15.4535L17.3607 13.1586L14.8318 10.8952V7.69619C15.8763 7.67489 16.8715 7.24792 17.6067 6.50567C18.3419 5.76342 18.7593 4.76418 18.7706 3.71953C18.7706 0.975708 16.1532 0.00209168 14.6675 0.00209168C14.2653 -0.0102783 13.8633 0.0322617 13.4726 0.128535V0.261301C13.6686 0.261301 13.9594 0.22969 14.0542 0.22969C15.0847 0.22969 15.8624 0.716498 15.8624 1.65218C15.8562 1.85411 15.809 2.05266 15.7235 2.23571C15.638 2.41875 15.5161 2.58244 15.3652 2.71677C15.2143 2.85109 15.0376 2.95323 14.8459 3.01695C14.6542 3.08066 14.4515 3.1046 14.2502 3.08732C11.7213 3.08732 8.693 1.01996 5.43075 1.01996C2.52255 1.00732 0.537385 3.17583 0.537385 5.36962C0.537385 7.56342 1.80182 8.24622 3.12316 8.7267L3.15477 8.60026C2.91743 8.45028 2.72511 8.23886 2.59822 7.98842C2.47133 7.73797 2.41459 7.45785 2.43404 7.17777C2.4493 6.92796 2.51386 6.68363 2.62398 6.45888C2.73411 6.23414 2.88763 6.03341 3.07569 5.86826C3.26375 5.70312 3.48264 5.57683 3.71973 5.49668C3.95683 5.41652 4.20745 5.38408 4.45714 5.40124C7.20096 5.40124 11.6265 7.69619 14.3766 7.69619H14.6359V10.9268L12.107 13.1586L14.6359 15.4535V20.1572C13.5788 20.533 12.4638 20.7192 11.342 20.7072C7.07452 20.7072 4.38759 18.1215 4.38759 13.8287C4.37897 12.8127 4.51955 11.8009 4.80486 10.8257L6.93543 9.88999V19.3733L11.2661 17.4766V7.75941L4.88072 10.6044C5.17861 9.73458 5.646 8.93247 6.25588 8.24446C6.86575 7.55645 7.606 6.99621 8.43379 6.59613L8.40218 6.5013C4.13471 7.43698 0 10.6739 0 15.5167C0 21.1055 4.71635 25 10.2103 25C16.0267 25 19.3206 21.1245 19.3522 15.4725L19.2574 15.4535Z"\n      fill=var(--color-tone-1)\n    />\n  </svg>\n  </a>\n';
+    rt.innerHTML = '\n  <a href="https://kavishavi.github.io/hinglishwordlens/">\n  Hinglish Worldle Non-Stop</a> \n <BR/> <a href="https://kavishavi.github.io/hinglishwordle/">\n  Hinglish Worldle (Daily)</a>\n';
+    
+    /*
     var it = function(e) {
         r(t, e);
         var a = h(t);
@@ -8128,6 +8174,8 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
         }]), t
     }(u(HTMLElement));
     customElements.define("nyt-icon", it);
+    */
+    
     var lt = document.createElement("template");
     lt.innerHTML = '\n<svg width="24" height="17" viewBox="0 0 24 17" fill="none" xmlns="http://www.w3.org/2000/svg">\n    <rect x="0.172974" width="20" height="3" rx="1.5" fill=var(--color-tone-1) />\n    <rect x="0.172974" y="7" width="20" height="3" rx="1.5" fill=var(--color-tone-1) />\n    <rect x="0.172974" y="14" width="20" height="3" rx="1.5" fill=var(--color-tone-1) />\n</svg>\n';
     var dt = function(e) {
