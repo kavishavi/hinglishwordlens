@@ -7967,7 +7967,7 @@ this.wordle = this.wordle || {}, this.wordle.bundle =  function(e) {
                                         }
                                     })), d += "\n")
                                 })), {
-                                    text: "".concat(l, "\n \n").concat(d.trimEnd()).concat("\n\n bit.ly/HinglishWordlens \n")
+                                    text: "".concat(l, "\n \n").concat(d.trimEnd()).concat("\n\n bit.ly/hinglishwordlens \n")
                                 }
                             }({
                                 evaluations: e.gameApp.evaluations,
