@@ -38,9 +38,9 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "https://www.nytimes.com/games/wordle",
+  "start_url": "https://kavishavi.github.io/hinglishwordle",
   "background_color": "#6aaa64",
   "display": "standalone",
   "theme_color": "#6aaa64",
-  "description": "A daily word game"
+  "description": "A daily Hinglish word game"
 }
